@@ -27,11 +27,57 @@ print("Welcome to the UW Calculator Playground")
 //: For this latter set of operations, it is safe to assume that `["count"]` (with no additional arguments) is 0, `["avg"]` is also 0, and `["fact"]` is 0. `["1", "fact"]` should return 1, and `["0", "fact"]` should also return 1. (Yes, 0-factorial is 1. True story.)
 //: 
 func calculate(_ args: [String]) -> Int {
-    return -1
+    //guard args.count >= 2 else { return -1 }
+    
+    switch args.last {
+    case "count":
+        return args.count - 1
+    case "avg":
+        guard args.count >= 2 else {return 0}
+        var sum = 0
+        for i in 0...(args.count - 1) {
+            sum = sum + (Int(args[i]) ?? 0)
+        }
+        return sum / (args.count - 1)
+    case "fact":
+        guard args.count == 2 else { return 0 }
+        let num = Int(args[0]) ?? -1
+        if num == 0 { return 1 }
+        var result = 1
+        for i in 1...num {
+            result *= i
+        }
+        return result
+    default:
+        let num1 = Int(args[0]) ?? -1
+        let num2 = Int(args[2]) ?? -1
+        let operation = args[1]
+        
+        switch operation {
+        case "+":
+            return num1 + num2
+        case "-":
+            return num1 - num2
+        case "*":
+            return num1 * num2
+        case "/":
+            return num1 / num2
+        case "%":
+            return num1 % num2
+            
+        default:
+            return -1
+        }
+    }
 }
+print (calculate(["1", "2", "3", "4", "5", "avg"]))
 
 func calculate(_ arg: String) -> Int {
-    return -1
+    let splitArgs = arg.split(separator: " ")
+    guard splitArgs.count >= 2 else { return -1 }
+
+    let stringArgs = splitArgs.map { String($0) }  // Convert Substrings to Strings
+    return calculate(stringArgs)
 }
 
 //: Below this are the test expressions/calls to verify if your code is correct.
@@ -85,7 +131,7 @@ calculate("5 fact") == 120
 //: Implement `calculate([String])` and `calculate(String)` to handle negative numbers. You need only make the tests below pass. (You do not need to worry about "fact"/factorial with negative numbers, for example.)
 //:
 //: This is worth 1 pt
-/*
+
 calculate(["2", "+", "-2"]) == 0
 calculate(["2", "-", "-2"]) == 4
 calculate(["2", "*", "-2"]) == -4
@@ -100,7 +146,7 @@ calculate("2 - -2") == 4
 calculate("-2 / 2") == -1
 
 calculate("1 -2 3 -4 5 count") == 5
-*/
+
  
 //: Implement `calculate([String])` and `calculate(String)` to use 
 //: and return floating-point values. You need only make the tests 
